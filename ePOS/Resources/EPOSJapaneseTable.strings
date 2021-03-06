@@ -1,0 +1,87 @@
+/* 
+  EPOSJapaneseTable.strings
+  ePOS
+
+  Created by komatsu on 2014/06/13.
+  Copyright (c) 2014年 iWare. All rights reserved.
+*/
+
+"Check" = "スキャン";
+"Card" = "カード";
+"Cash" = "現金";
+
+"Scan" = "スキャン";
+
+"Remove Item" = "商品取消";
+"Remove All Items" = "商品全取消";
+
+"Total" = "合計";
+"Deposit" = "預り";
+"Change" = "釣り";
+
+"Item" = "商品名";
+"Price" = "単価";
+"Qty." = "数量";
+"Amount" = "金額";
+"Subtotal" = "小計";
+"Phonetic_Total" = "ｺﾞｳｹｲ";
+"Phonetic_Subtotal" = "ｼｮｳｹｲ";
+"Item Code" = "商品コード";
+"Phonetic_Deposit" = "ｱｽﾞｶﾘ";
+"Phonetic_Change" = "ｵﾂﾘ";
+
+"Welcome to sample shop" = "Welcome to epson sample shop.  Thank you!";
+
+"Delete all items." = "すべての商品を削除します。";
+"Will that be all right?" = "よろしいですか？";
+"Cash is less than subtotal." = "預り金が不足しています。";
+"Delete" = "削除";
+
+// card
+"Entering a Credit Card" = "クレジットカードを読み込んでください";
+"Signature" = "署名をしてください";
+"Clear Sign" = "クリア";
+
+// print
+"THE STORE\n" = "THE STORE\n";
+"Japan\n" = "東京都新宿区新宿 X-X-X\n";
+"03-XXXX-XXXX\n\n" = "03-XXXXX-XXXX\n\n";
+"Thank you for shopping\n" = "毎度ありがとうございます\n";
+"Please visit us again soon\n\n" = "またのご来店をお待ちしております\n";
+"QTYSTRING" = "%2d点";
+"  NET " = "税　抜";
+"  TAX " = "消費税";
+" TOTAL" = "合　計";
+"DepositPrint" = "お預り";
+"ChangePrint" = "お釣り";
+"Card Total : " = "合計 :\n";
+"%d lines%04d\n"  = "%d 点　担当:%04d \n";
+
+// data settings view
+"Please enter the correct data." = "データを正しく入力してください。";
+
+// error messages
+"Connect error!" = "接続エラー。";
+"Print Error!" = "印刷エラー";
+"Display error!" = "ディスプレーエラー";
+"Scanner error!" = "スキャナーエラー";
+
+// detail messages
+"EDEV_OC_SUCCESS" = "処理に成功しました。";
+"EDEV_OC_ERR_AUTOMATICAL" = "自動復帰エラーが発生しました。";
+"EDEV_OC_ERR_COVER_OPEN" = "カバーオープンエラーが発生しました。";
+"EDEV_OC_ERR_CUTTER" = "オートカッターエラーが発生しました。";
+"EDEV_OC_ERR_MECHANICAL" = "メカニカルエラーが発生しました。";
+"EDEV_OC_ERR_EMPTY" = "ロール紙エンド検出器に用紙がありません。";
+"EDEV_OC_ERR_UNRECOVERABLE" = "復帰不可能エラーが発生しました。";
+"EDEV_OC_ERR_FAILURE" = "要求ドキュメントの構文に誤りがあります。";
+"EDEV_OC_ERR_FOUND" = "デバイス ID で指定したプリンターが存在しません。";
+"EDEV_OC_ERR_SYSTEM" = "システムにエラーが発生しました。";
+"EDEV_OC_ERR_PORT" = "通信ポートに異常を検出しました。";
+"EDEV_OC_ERR_TIMEOUT" = "タイムアウトが発生しました。";
+"EDEV_OC_ERR_IN_USE" = "デバイスは使用中です";
+"NotConnected" = "接続されていません。";
+"UnexpectedError" = "原因不明のエラー";
+
+"Cancel" = "キャンセル";
+

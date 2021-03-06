@@ -1,0 +1,29 @@
+//
+//  Prefix header
+//
+//  The contents of this file are implicitly included at the beginning of every source file.
+//
+
+#import <Availability.h>
+
+#ifndef __IPHONE_5_0
+#warning "This project uses features only available in iOS SDK 5.0 and later."
+#endif
+
+#ifdef __OBJC__
+    #import <UIKit/UIKit.h>
+    #import <Foundation/Foundation.h>
+#endif
+
+
+#define EPOSLocalizedString(key, mode, comment) \
+    NSLocalizedStringFromTable(key, mode == 0 ? @"EPOSEnglishTable" : @"EPOSJapaneseTable", comment)
+
+
+#ifdef DEBUG
+//#define DEBUG_LOG(args...) NSLog(args);
+#define DEBUG_LOG(args...) NSLog([[NSString stringWithFormat:@"%s ", __func__]  stringByAppendingFormat:args],nil);
+//#define DEBUG_LOG(args...) NSLog([[NSString stringWithFormat:@"%s:%d ", __FILE__, __LINE__]  stringByAppendingFormat:args],nil);
+#else
+#define DEBUG_LOG(args...)
+#endif

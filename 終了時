@@ -1,0 +1,60 @@
+^(int result) {
+        //タッチイベントを有効にしておく
+        if([[UIApplication sharedApplication] isIgnoringInteractionEvents]) {
+            [[UIApplication sharedApplication] endIgnoringInteractionEvents];
+        }
+        
+        if(result == EPOS2_SUCCESS) {
+            _isIdle = YES;
+            //1秒タイマーを設定しidleProcessメソッド（マーキー表示を行っている）を実行する
+            _idleTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(idleProcess) userInfo:nil repeats:YES];
+
+#if 1
+            _toolbarViewController.connectStatus = ePOSConnectStatusConnected;
+            _toolbarViewController.displayReady = ePOSToolbarIndicatorModeOnline;
+
+            //スキャン時の処理を登録しておく（startScanner）
+            [self performSelector:@selector(startScanner)];
+            
+            _connected = YES;
+
+#else
+            dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+            dispatch_async(queue, ^{
+                while(!agent.isEposPrinter || !agent.isEposDisplay || !agent.isEPosScanner ) {
+                    //画面を固めずにしばらくスリープ
+                    [NSThread sleepForTimeInterval:0.05];
+                }
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    controller.connectStatus = ePOSConnectStatusConnected;
+                    _connected = YES;
+                    NSLog(@"Connected");
+                });
+            });
+#endif
+
+        } else {
+            //接続に失敗の時は通知センターに知らせたのちにメッセージダイアログをあげる。ブロック
+            [[NSNotificationCenter defaultCenter] postNotificationName:ePOSDisconnectNotification object:self];
+            if(_connected == YES)
+            {
+                NSString *message = [ePOSErrorMessage message:result];
+                if(message.length) {
+                    IWUIAlertView *alert =
+                    [[IWUIAlertView alloc] initWithTitle:EPOSLocalizedString(@"Connect error!", _skinManager.language, nil)
+                                                 message:message
+                                                delegate:nil
+                                       cancelButtonTitle:NSLocalizedString(@"OK", nil)
+                                       otherButtonTitles:nil, nil];
+                    [alert showWithCompletionHandler:^(NSInteger button){}];
+                }
+            }
+            [_idleTimer invalidate];
+            _idleTimer = nil;
+            _isIdle = NO;
+            _connected = NO;
+            _toolbarViewController.connectStatus = ePOSConnectStatusDisconnect;
+            _toolbarViewController.printerReady = ePOSToolbarIndicatorModeOffline;
+
+        }
+    }];

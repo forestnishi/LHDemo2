@@ -1,0 +1,18 @@
+修正方針としては
+
+　ePOSAgentクラス内に各デバイスの接続状態を活用されていない下記のプロパティにセットする
+@property (nonatomic) BOOL isEposPrinter;
+@property (nonatomic) BOOL isEposDisplay;
+@property (nonatomic) BOOL isEPosScanner;
+
+connect時には、ひとまず　NSUserDefaults standardUserDefaultsからセットされている値を
+取り込み、trueの場合のみconnctさせる
+
+connectに失敗した時は上記プロパティをfalseに設定する
+
+displayについては表示を行う際には必ず上記プロパティをかくにんの上、表示メソッド、clearメソッドを実行する。
+
+
+
+
+

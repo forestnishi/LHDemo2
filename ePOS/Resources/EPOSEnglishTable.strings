@@ -1,0 +1,85 @@
+/* 
+  EPOSEnglishTable.strings
+  ePOS
+
+  Created by komatsu on 2014/06/13.
+  Copyright (c) 2014年 iWare. All rights reserved.
+*/
+
+"Check" = "Scan";
+"Card" = "Card";
+"Cash" = "Cash";
+
+"Scan" = "Scan";
+
+"Remove Item" = "Remove Item";
+"Remove All Items" = "Remove All Items";
+
+"Total" = "Total";
+"Deposit" = "Deposit";
+"Change" = "Change";
+
+"Item" = "Item";
+"Price" = "Price";
+"Qty." = "Qty.";
+"Amount" = "Amount";
+"Subtotal" = "Subtotal";
+"Phonetic_Subtotal" = "Subtotal";
+"Item Code" = "Item Code";
+"Phonetic_Deposit" = "Deposit";
+"Phonetic_Change" = "Change";
+"Welcome to sample shop" = "Welcome to sample shop";
+
+
+"Delete all items." = "Delete all items.";
+"Will that be all right?" = "Will that be all right?";
+"Cash is less than subtotal." = "Cash is less than subtotal.";
+"Delete" = "Delete";
+
+// card
+"Entering a Credit Card" = "Entering a Credit Card";
+"Signature" = "Signature";
+"Clear Sign" = "Clear Sign";
+
+// print
+"THE STORE\n" = "THE STORE\n";
+"Japan\n" = "Japan\n";
+"03-XXXX-XXXX\n\n" = "03-XXXX-XXXX\n\n";
+"Thank you for shopping\n" = "Thank you for shopping\n";
+"Please visit us again soon\n\n" = "Please visit us again soon\n\n";
+"QTYSTRING" = "%2d";
+"  NET " = "  NET ";
+"  TAX " = "  TAX ";
+" TOTAL" = " TOTAL";
+"DepositPrint" = "Deposit";
+"ChangePrint" = "Change";
+"Card Total : " = "Total :\n";
+"%d lines%04d\n" = "%d lines%04d\n";
+
+// data settings view
+"Please enter the correct data." = "Please enter the correct data.";
+
+// error messages
+"Connect error!" = "Connect error!";
+"Print Error!" = "Print Error!";
+"Display error!" = "Display error!";
+"Scanner error!" = "Scanner error!";
+
+// detail messages
+"EDEV_OC_SUCCESS" = "Processing was successful.";
+"EDEV_OC_ERR_AUTOMATICAL" = "An automatically recoverable error occurred";
+"EDEV_OC_ERR_COVER_OPEN" = "A cover open error occurred";
+"EDEV_OC_ERR_CUTTER" = "An autocutter error occurred";
+"EDEV_OC_ERR_MECHANICAL" = "A mechanical error occurred";
+"EDEV_OC_ERR_EMPTY" = "No paper in roll paper end sensor";
+"EDEV_OC_ERR_UNRECOVERABLE" = "An unrecoverable error occurred";
+"EDEV_OC_ERR_FAILURE" = "The request document contains a syntax error";
+"EDEV_OC_ERR_NOT_FOUND" = "The printer with the specified device ID does not exist";
+"EDEV_OC_ERR_SYSTEM" = "An error occurred on the system";
+"EDEV_OC_ERR_PORT" = "An error was detected on the communication port";
+"EDEV_OC_ERR_TIMEOUT" = "A timeout occurred";
+"EDEV_OC_ERR_IN_USE" = "Device is in use";
+"NotConnected" = "Not Connected";
+"UnexpectedError" = "Unexpected Error";
+
+"Cancel" = "Cancel";
