@@ -96,7 +96,8 @@ static ePOSAgent *_agent = nil;
         //log
         int result = [Epos2Log setLogSettings:EPOS2_PERIOD_PERMANENT output:EPOS2_OUTPUT_STORAGE ipAddress:nil port:0 logSize:3 logLevel:EPOS2_LOGLEVEL_LOW];
         
-        isAccounting = FALSE;
+        //isAccounting = NO;
+        AccountingFlg = 0;
         if( _isEposPrinter ) {
             //init printer
             _eposPrinter = [[Epos2Printer alloc] initWithPrinterSeries:EPOS2_TM_M30II lang:EPOS2_MODEL_JAPANESE];
@@ -120,6 +121,9 @@ static ePOSAgent *_agent = nil;
             else {
                 isPrinterConnected = TRUE;
                 _isEposPrinter = true;
+                self.DeviceState = 1; // connect_idling
+                // change Accounting State to idling(1)
+                AccountingFlg = 1;
             }
         }
         
@@ -132,7 +136,7 @@ static ePOSAgent *_agent = nil;
             
             [_eposScanner setScanEventDelegate:self];
             
-            //connect barcode
+            //connect barcode reader
             result = [_eposScanner connect:strScanner timeout:EPOS2_PARAM_DEFAULT];
             if (result != EPOS2_SUCCESS) {
                 _isEposScanner = false;
@@ -159,14 +163,7 @@ static ePOSAgent *_agent = nil;
                 isDisplayConnected = FALSE;
             }
             else isDisplayConnected = TRUE;
-            BOOL bSuccess = ( EPOS2_SUCCESS == result)? YES : NO;
-            if( YES == bSuccess ) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if(_connectHandler) {
-                        _connectHandler(result);
-                    }
-                });
-            }
+            
             
             // special initialize for D70
             _isMarqueeScrolling = NO;
@@ -193,12 +190,33 @@ static ePOSAgent *_agent = nil;
                 // D70以外のケース：ダウンロードイメージを行わない
                 isDownloadingImages = NO;
                 DLimgStatus = 0;
+                // stateがconnect_idlingならマーキーを表示する。
             }
         }
         else {
             // カスタマディスプレイが選択されていないケース：ダウンロードイメージを行わない
             isDownloadingImages = NO;
             DLimgStatus = 0;
+        }
+        
+        if( AccountingFlg == 1 && isDisplayConnected ) {
+            // D70以外の機種へのマーキー指示
+            if( ePOSDisplayModelKey != 3 ) {
+                _timerIdle = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(displayMarqeeText:) userInfo:nil repeats:NO];
+            }
+            // D70へのマーキー指示
+            else {
+                _timerIdle = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(showSlide) userInfo:nil repeats:NO];
+            }
+        }
+        
+        BOOL bSuccess = ( EPOS2_SUCCESS == result)? YES : NO;
+        if( YES == bSuccess ) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if(_connectHandler) {
+                    _connectHandler(result);
+                }
+            });
         }
     });
 }
@@ -210,6 +228,8 @@ static ePOSAgent *_agent = nil;
     dispatch_async(queue, ^{
         _disconnectHandler = completion;
         
+        // change Accounting State to disable(0)
+        AccountingFlg = 0;
         //scanner
         int result = EPOS2_SUCCESS;
         if(_isEposScanner) {
@@ -576,6 +596,7 @@ static ePOSAgent *_agent = nil;
         _slideNumber = 0;
         _totalslideNumber = 3;
         _currentSelector = nil;
+        self.DeviceState = 0;
     }
     return self;
 }
@@ -585,7 +606,18 @@ static ePOSAgent *_agent = nil;
 
 - (void) onPtrReceive:(Epos2Printer *)printerObj code:(int)code status:(Epos2PrinterStatusInfo *)status printJobId:(NSString *)printJobId
 {
-    isAccounting = NO;
+    // change Accounting State to idling(1)
+    AccountingFlg = 1;
+    if( AccountingFlg == 1 && isDisplayConnected ) {
+            // D70以外の機種へのマーキー指示
+            if( ePOSDisplayModelKey != 3 ) {
+                _timerIdle = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(displayMarqeeText:) userInfo:nil repeats:NO];
+            }
+            // D70へのマーキー指示
+            else {
+                _timerIdle = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(showSlide) userInfo:nil repeats:NO];
+            }
+    }
     DEBUG_LOG(@"INPUT : code%d", code);
     dispatch_async(dispatch_get_main_queue(), ^{
         if(_printCompletionHandler) {
@@ -632,7 +664,7 @@ static ePOSAgent *_agent = nil;
 - (int)addItemDisplay:(NSString *)itemStr valueStr:(NSString *)valueStr yPosition:(NSInteger)yPosition
 {
     // 会計を始める
-    isAccounting = YES;
+    AccountingFlg = 2;
     
     // stop slideshow
     _isDLTimerStarted = FALSE;
@@ -928,9 +960,39 @@ static ePOSAgent *_agent = nil;
 }
 
 -(void) enableMarquee {
+    // for only DM-D70
     DEBUG_LOG(@"enableMarquee isDownload NO");
     isDownloadingImages = NO;
     DLimgStatus = 2;
 }
+
+/*
+- (void)idleProcess
+{
+    if(_isIdle == NO) {
+        _idleCount = 5;
+       //_showMarqee = NO;
+        return;
+    }
+    
+    
+    int result=0;
+    if(_idleCount ==5 && isDisplayConnected == YES ) {
+        ePOSAgent *agent = [ePOSAgent sharedAgent];
+        if( agent.isEposDisplay && isAccounting == NO && DLimgStatus == 2 ) {
+            DEBUG_LOG(@"initialize maquee");
+            result = [agent displayMarqeeText:EPOSLocalizedString(@"Welcome to sample shop", _skinManager.language, nil)];
+        }
+        if( result != EPOS2_SUCCESS) {
+            DEBUG_LOG(@"Display Error! result = %zi", result);
+        }
+        _idleCount --;
+        //_showMarqee = YES;
+        return;
+    }
+    if( _idleCount == 0 ) _idleCount = 5;
+    else _idleCount --;
+}*/
+
 
 @end

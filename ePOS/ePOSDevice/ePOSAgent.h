@@ -22,6 +22,7 @@ typedef void (^ePosAgentPrintCompletionHandler)(Epos2Printer* printerObj,int cod
 @property (nonatomic) BOOL isEposDisplay;
 @property (nonatomic) BOOL isEposScanner;
 @property (nonatomic) BOOL isEPosKeyboard;
+@property (nonatomic) int DeviceState; // 0:not_connect  1:connect_idling    2:connect_accounting
 
 @property (nonatomic) BOOL connect;
 
@@ -30,6 +31,7 @@ typedef void (^ePosAgentPrintCompletionHandler)(Epos2Printer* printerObj,int cod
 @property(nonatomic) int totalslideNumber;
 @property(nonatomic) int RegisterImageNunber;
 @property(nonatomic) NSTimer * timer;
+@property(nonatomic) NSTimer * timerIdle;
 @property(nonatomic) BOOL isDLTimerStarted;
 // 任意のコールバックメソッドを登録するための変数　セレクタ名をセットして使用する
 @property(nonatomic)  NSString* currentSelector;

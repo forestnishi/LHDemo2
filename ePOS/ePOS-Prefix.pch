@@ -26,4 +26,5 @@
 //#define DEBUG_LOG(args...) NSLog([[NSString stringWithFormat:@"%s:%d ", __FILE__, __LINE__]  stringByAppendingFormat:args],nil);
 #else
 #define DEBUG_LOG(args...)
+//#define DEBUG_LOG(args...) NSLog(@”__func__ : %s %@” , __func__);
 #endif

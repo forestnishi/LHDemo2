@@ -20,7 +20,7 @@
 {
     ePOSSkinManager *_skinManager;
     ePOSConnectStatus _connect;
-    NSTimer *_timer;
+    //NSTimer *_timer;
 }
 @end
 
@@ -36,7 +36,7 @@
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(redrawView) name:ePOSChangeSkinNotification object:nil];
-    _timer = nil;
+    //_timer = nil;
 
 //    self.printerReady = ePOSToolbarIndicatorModeOffline;
 //    self.displayReady = ePOSToolbarIndicatorModeOffline;
@@ -61,21 +61,21 @@
     if(_connect == ePOSConnectStatusDisconnect) {
         _wifiButton.enabled = YES;
         [_wifiButton setImage:_skinManager.toolBarButtonWifiOFF forState:UIControlStateNormal];
-        [_timer invalidate];
-        _timer = nil;
+        //[_timer invalidate];
+        //_timer = nil;
         _wifiButton.alpha = 1.;
     } else if(_connect == ePOSConnectStatusConnecting) {
         _wifiButton.enabled = NO;
         [_wifiButton setImage:_skinManager.toolBarButtonWifiON forState:UIControlStateNormal];
-        if(_timer == nil) {
-            _timer = [NSTimer scheduledTimerWithTimeInterval:0.7 target:self selector:@selector(idleProcess) userInfo:nil repeats:YES];
-        }
+        //if(_timer == nil) {
+            //_timer = [NSTimer scheduledTimerWithTimeInterval:0.7 target:self selector:@selector(idleProcess) userInfo:nil repeats:YES];
+        //}
         _wifiButton.alpha = 1.;
     } else {
         _wifiButton.enabled = YES;
         [_wifiButton setImage:_skinManager.toolBarButtonWifiON forState:UIControlStateNormal];
-        [_timer invalidate];
-        _timer = nil;
+        //[_timer invalidate];
+        //_timer = nil;
         _wifiButton.alpha = 1.;
     }
 }
@@ -222,6 +222,7 @@
 {
     if ( [self.delegate respondsToSelector:@selector(ePOSToolbarViewControllerDidSelectScanner:)] ) {
         [self.delegate ePOSToolbarViewControllerDidSelectScanner:self];
+
     }
 
 }

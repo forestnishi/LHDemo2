@@ -38,6 +38,7 @@ BOOL isScannerConnected = FALSE;
 BOOL isDisplayLandscape = FALSE;
 BOOL isDownloadingImages = TRUE;
 int DLimgStatus = 0;
-BOOL isAccounting = FALSE;
+//BOOL isAccounting = FALSE;
+int AccountingFlg = 0;
 @implementation ePOSUserDefault
 @end

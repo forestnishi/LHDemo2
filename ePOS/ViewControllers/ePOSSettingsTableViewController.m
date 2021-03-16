@@ -14,7 +14,7 @@
 
 @interface ePOSSettingsTableViewController ()
 {
-    NSTimer *_timer;
+    //NSTimer *_timer;
     BOOL _disconnect;
 }
 @end
@@ -75,10 +75,10 @@
 
 - (void)dealloc
 {
-    if(_timer) {
-        [_timer invalidate];
-        _timer = nil;
-    }
+    //if(_timer) {
+        //[_timer invalidate];
+        //_timer = nil;
+    //}
 }
 
 - (void)didReceiveMemoryWarning
@@ -177,8 +177,8 @@
     if([segue.identifier isEqualToString:@"PushApply"]) {
         [self saveParams];
     }
-    [_timer invalidate];
-    _timer = nil;
+    //[_timer invalidate];
+    //_timer = nil;
 }
 
 /*

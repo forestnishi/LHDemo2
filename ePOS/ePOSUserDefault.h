@@ -36,7 +36,8 @@ extern BOOL isScannerConnected;
 extern BOOL isDisplayLandscape;
 extern BOOL isDownloadingImages;
 extern int DLimgStatus;
-extern BOOL isAccounting;
+//extern BOOL isAccounting;
+extern int AccountingFlg;
 
 @interface ePOSUserDefault : NSObject
 @end

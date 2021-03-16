@@ -94,9 +94,9 @@
 	</dict>
 	<key>21000041</key>
 	<dict>
-		<key>name_jp</key>
+		<key>phonetic_jp</key>
 		<string>バッテラ</string>
-		<key>phoetic_jp</key>
+		<key>name_jp</key>
 		<string>バッテラ</string>
 		<key>name_en</key>
 		<string>sushi</string>

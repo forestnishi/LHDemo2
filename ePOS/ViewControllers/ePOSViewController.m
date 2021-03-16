@@ -62,7 +62,7 @@ NSString * const ePOSDisconnectNotification              = @"ePOSDisconnectNotif
     ePOSTotalViewController *_totalViewController;
     ePOSToolbarViewController *_toolbarViewController;
     ePOSKeyboardViewController *_keyboardViewController;
-    NSTimer *_idleTimer;
+    //NSTimer *_idleTimer;
     NSUInteger _idleCount;
     BOOL _isIdle;
     //BOOL _showMarqee;
@@ -574,7 +574,6 @@ NSString * const ePOSDisconnectNotification              = @"ePOSDisconnectNotif
         }
         if(result == EPOS2_SUCCESS) {
             _isIdle = YES;
-            _idleTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(idleProcess) userInfo:nil repeats:YES];
 
 #if 1
             _toolbarViewController.connectStatus = ePOSConnectStatusConnected;
@@ -613,76 +612,7 @@ NSString * const ePOSDisconnectNotification              = @"ePOSDisconnectNotif
                 });
             });
 #endif
-//            // printer
-//            NSUserDefaults *def = [NSUserDefaults standardUserDefaults];
-//            if([[def objectForKey:ePOSDefaultValidPrinterKey] boolValue]) {
-//                _toolbarViewController.printerReady = ePOSToolbarIndicatorModeConnectiong;
-//                [agent createPrinterID:printerID completion:^(int result) {
-//                    if(result == EPOS2_SUCCESS) {
-//                        _toolbarViewController.printerReady = ePOSToolbarIndicatorModeOnline;
-//                    } else {
-//                        _toolbarViewController.printerReady = ePOSToolbarIndicatorModeOffline;
-//                        NSString *message = [ePOSErrorMessage message:result];
-//                        if(message.length) {
-//                            IWUIAlertView *alert =
-//                            [[IWUIAlertView alloc] initWithTitle:EPOSLocalizedString(@"Printer error!", _skinManager.language, nil)
-//                                                         message:message
-//                                                        delegate:nil
-//                                               cancelButtonTitle:EPOSLocalizedString(@"OK", _skinManager.language, nil)
-//                                               otherButtonTitles:nil, nil];
-//                            [alert showWithCompletionHandler:^(NSInteger button){}];
-//                        }
-//                    }
-//                }];
-//            }
-//
-//            // display
-//            if([[def objectForKey:ePOSDefaultValidDisplayKey] boolValue]) {
-//                _toolbarViewController.displayReady = ePOSToolbarIndicatorModeConnectiong;
-//                [agent createDisplayID:displayID completion:^(int result) {
-//                    if(result == EPOS2_SUCCESS) {
-//                        _toolbarViewController.displayReady = ePOSToolbarIndicatorModeOnline;
-//                        [agent resetDisplay];
-//                        [agent displayMarqeeText:EPOSLocalizedString(@"Welcome to Epson sample shop", _skinManager.language, nil)];
-//                        _showMarqee = YES;
-//                    } else {
-//                        _toolbarViewController.displayReady = ePOSToolbarIndicatorModeOffline;
-//                        NSString *message = [ePOSErrorMessage message:result];
-//                        if(message.length) {
-//                            IWUIAlertView *alert =
-//                            [[IWUIAlertView alloc] initWithTitle:EPOSLocalizedString(@"Display error!", _skinManager.language, nil)
-//                                                         message:message
-//                                                        delegate:nil
-//                                               cancelButtonTitle:NSLocalizedString(@"OK", nil)
-//                                               otherButtonTitles:nil, nil];
-//                            [alert showWithCompletionHandler:^(NSInteger button){}];
-//                        }
-//                    }
-//                }];
-//            }
-//
-//            // scanner
-//            if([[def objectForKey:ePOSDefaultValidScannerKey] boolValue]) {
-//                _toolbarViewController.scannerReady = ePOSToolbarIndicatorModeConnectiong;
-//                [agent createScannerID:scannerID completion:^(int result) {
-//                    if(result == EPOS2_SUCCESS) {
-//                        [self performSelector:@selector(startScanner)];
-//                        _toolbarViewController.scannerReady = ePOSToolbarIndicatorModeOnline;
-//                    } else {
-//                        _toolbarViewController.scannerReady = ePOSToolbarIndicatorModeOffline;
-//                        NSString *message = [ePOSErrorMessage message:result];
-//                        if(message.length) {
-//                            IWUIAlertView *alert =
-//                            [[IWUIAlertView alloc] initWithTitle:EPOSLocalizedString(@"Scanner error!", _skinManager.language, nil)
-//                                                         message:message
-//                                                        delegate:nil
-//                                               cancelButtonTitle:EPOSLocalizedString(@"OK", _skinManager.language, nil)
-//                                               otherButtonTitles:nil, nil];
-//                            [alert showWithCompletionHandler:^(NSInteger button){}];
-//                        }
-//                    }
-//                }];
-//            }
+
         } else {
             [[NSNotificationCenter defaultCenter] postNotificationName:ePOSDisconnectNotification object:self];
             if(_connected == YES)
@@ -698,8 +628,8 @@ NSString * const ePOSDisconnectNotification              = @"ePOSDisconnectNotif
                     [alert showWithCompletionHandler:^(NSInteger button){}];
                 }
             }
-            [_idleTimer invalidate];
-            _idleTimer = nil;
+            //[_idleTimer invalidate];
+            //_idleTimer = nil;
             _isIdle = NO;
             _connected = NO;
             _toolbarViewController.connectStatus = ePOSConnectStatusDisconnect;
@@ -713,8 +643,8 @@ NSString * const ePOSDisconnectNotification              = @"ePOSDisconnectNotif
 
 - (void)disconnect
 {
-    [_idleTimer invalidate];
-    _idleTimer = nil;
+    //[_idleTimer invalidate];
+    //_idleTimer = nil;
     _isIdle = NO;
     _connected = NO;
     _toolbarViewController.connectStatus = ePOSConnectStatusConnecting;
@@ -873,6 +803,8 @@ NSString * const ePOSDisconnectNotification              = @"ePOSDisconnectNotif
 
 - (void)addItem:(NSString *)code
 {
+    // change Accounting State to Accounting(2)
+    AccountingFlg = 2;
     if(_keyboardMode == ePOSKeyboardModeNormal || _keyboardMode == ePOSKeyboardModeNone || _keyboardMode == ePOSKeyboardModeIemCode) {
         NSString *name = [_dataManager nameFromCode:code];
         if(name.length) {
@@ -904,32 +836,6 @@ NSString * const ePOSDisconnectNotification              = @"ePOSDisconnectNotif
     }
 }
 
-- (void)idleProcess
-{
-    if(_isIdle == NO) {
-        _idleCount = 5;
-       //_showMarqee = NO;
-        return;
-    }
-    
-    
-    int result=0;
-    if(_idleCount ==5 && isDisplayConnected == YES ) {
-        ePOSAgent *agent = [ePOSAgent sharedAgent];
-        if( agent.isEposDisplay && isAccounting == NO && DLimgStatus == 2 ) {
-            DEBUG_LOG(@"initialize maquee");
-            result = [agent displayMarqeeText:EPOSLocalizedString(@"Welcome to sample shop", _skinManager.language, nil)];
-        }
-        if( result != EPOS2_SUCCESS) {
-            DEBUG_LOG(@"Display Error! result = %zi", result);
-        }
-        _idleCount --;
-        //_showMarqee = YES;
-        return;
-    }
-    if( _idleCount == 0 ) _idleCount = 5;
-    else _idleCount --;
-}
 
 - (void)printReceipt
 {
@@ -945,6 +851,8 @@ NSString * const ePOSDisconnectNotification              = @"ePOSDisconnectNotif
         else {
             [agent displayAllingedTextLines:@"お預り" depositValue:_itemManager.phoneticDeposit totalAmount:@"お買上" totalAmountValue:_itemManager.phoneticTotal dispence:@"お釣り" dispenseValue:_itemManager.phoneticChange];
         }
+        
+        
     }
 
     _isIdle = YES;

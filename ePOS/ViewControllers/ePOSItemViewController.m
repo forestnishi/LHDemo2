@@ -13,6 +13,8 @@
 #import "IWUIAlertView.h"
 #import "ePOSKeyboardViewController.h"
 #import "ePosDataSettingsTableViewController.h"
+#import "ePOSUserDefault.h"
+#import "ePOSAgent.h"
 
 @interface ePOSItemViewController ()
 {
@@ -132,6 +134,21 @@
                 indexPath = [NSIndexPath indexPathForRow:_itemManager.count - 1 inSection:0];
             }
             [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionMiddle];
+            
+            if( indexPath == 0 ) {
+                // change Accounting State to idling(1)
+                AccountingFlg = 1;
+                if( AccountingFlg == 1 && isDisplayConnected ) {
+                    // D70以外の機種へのマーキー指示
+                    if( ePOSDisplayModelKey != 3 ) {
+                        _timerIdle = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(displayMarqeeText:) userInfo:nil repeats:NO];
+                    }
+                    // D70へのマーキー指示
+                    else {
+                        _timerIdle = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(showSlide) userInfo:nil repeats:NO];
+                    }
+                }
+            }
         }
     }
 }
@@ -184,6 +201,20 @@
     
     self.keyBoardMode = ePOSKeyboardModeNone;
     [_itemManager removeAllItems];
+    
+    // change Accounting State to idling(1)
+    AccountingFlg = 1;
+    if( AccountingFlg == 1 && isDisplayConnected ) {
+        // D70以外の機種へのマーキー指示
+        if( ePOSDisplayModelKey != 3 ) {
+            _timerIdle = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(displayMarqeeText:) userInfo:nil repeats:NO];
+        }
+        // D70へのマーキー指示
+        else {
+            _timerIdle = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(showSlide) userInfo:nil repeats:NO];
+        }
+    }
+    
     [self refreshViews];
     if ( [self.delegate respondsToSelector:@selector(ePOSItemViewControllerDidUpdateItems:)] ) {
         [self.delegate ePOSItemViewControllerDidUpdateItems:self];
@@ -347,5 +378,10 @@
 
 - (NSString* )getMemberID{
     return _itemCodeValue.text;
+}
+
+- (void) dispMarquee {
+    ePOSAgent *agent = [ePOSAgent sharedAgent];
+    [agent displayMarqeeText:EPOSLocalizedString(@"Welcome to sample shop", _skinManager.language, nil)];
 }
 @end

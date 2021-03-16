@@ -35,6 +35,7 @@
 @property (nonatomic, weak) IBOutlet UIImageView *itemTitleBarImage;
 
 @property (nonatomic) ePOSKeyboardMode keyBoardMode;
+@property(nonatomic) NSTimer * timerIdle;
 
 - (IBAction)pushCodeButton:(id)sender;
 - (IBAction)pushRemoveItem:(id)sender;
